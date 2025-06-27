@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Animated Website</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 3D Animated Background */
+        .bg-3d {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .cube {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            animation: rotate 20s infinite linear;
+        }
+
+        .face {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .face:nth-child(1) {
+            transform: rotateY(0deg) translateZ(100px);
+            background: rgba(56, 182, 255, 0.1);
+        }
+
+        .face:nth-child(2) {
+            transform: rotateY(90deg) translateZ(100px);
+            background: rgba(255, 56, 182, 0.1);
+        }
+
+        .face:nth-child(3) {
+            transform: rotateY(180deg) translateZ(100px);
+            background: rgba(182, 255, 56, 0.1);
+        }
+
+        .face:nth-child(4) {
+            transform: rotateY(270deg) translateZ(100px);
+            background: rgba(255, 182, 56, 0.1);
+        }
+
+        .face:nth-child(5) {
+            transform: rotateX(90deg) translateZ(100px);
+            background: rgba(56, 255, 182, 0.1);
+        }
+
+        .face:nth-child(6) {
+            transform: rotateX(270deg) translateZ(100px);
+            background: rgba(182, 56, 255, 0.1);
+        }
+
+        @keyframes rotate {
+            from { transform: rotateX(0deg) rotateY(0deg); }
+            to { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        /* Floating cubes */
+        .floating-cube {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-100px) rotate(180deg); }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+        }
+
+        /* Smooth transitions */
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+
+        /* Card hover effect */
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Skill cards */
+        .skill-card {
+            perspective: 1000px;
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+
+        .skill-main {
+            transition: all 0.5s ease;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+        }
+
+        .skill-details {
+            transform: rotateX(90deg);
+            transform-origin: top center;
+            transition: all 0.5s ease;
+            position: absolute;
+            width: 100%;
+            top: 100%;
+            left: 0;
+            z-index: 10;
+        }
+
+        .skill-card.active .skill-main {
+            transform: rotateX(-90deg);
+        }
+
+        .skill-card.active .skill-details {
+            transform: rotateX(0deg);
+            display: block !important;
+        }
+
+        /* Phone number reveal animation */
+        .phone-reveal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s ease;
+        }
+
+        .phone-reveal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .phone-number {
+            font-size: 3rem;
+            color: white;
+            text-shadow: 0 0 20px rgba(56, 182, 255, 0.7);
+            transform: scale(0.5);
+            opacity: 0;
+            transition: all 0.5s ease 0.3s;
+        }
+
+        .phone-reveal.active .phone-number {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        /* Navbar glass effect */
+        .navbar-glass {
+            backdrop-filter: blur(10px);
+            background: rgba(15, 23, 42, 0.7);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen overflow-x-hidden">
+    <!-- 3D Animated Background -->
+    <div class="bg-3d">
+        <div class="cube">
+            <div class="face"></div>
+            <div class="face"></div>
+            <div class="face"></div>
+            <div class="face"></div>
+            <div class="face"></div>
+            <div class="face"></div>
+        </div>
+
+        <!-- Floating cubes -->
+        <div class="floating-cube" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+        <div class="floating-cube" style="top: 70%; left: 80%; animation-delay: 2s;"></div>
+        <div class="floating-cube" style="top: 40%; left: 50%; animation-delay: 4s;"></div>
+        <div class="floating-cube" style="top: 80%; left: 30%; animation-delay: 6s;"></div>
+        <div class="floating-cube" style="top: 10%; left: 70%; animation-delay: 8s;"></div>
+    </div>
+
+    <!-- Header/Navbar -->
+    <header class="navbar-glass fixed w-full z-50">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <a href="#" class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
+                        <i class="fas fa-cube mr-2"></i>Aalok Mandal
+                    </a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-gray-300 hover:text-white focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-white hover:text-blue-400 transition-all">Home</a>
+                    <a href="#portfolio" class="text-gray-300 hover:text-blue-400 transition-all">Portfolio</a>
+                    <a href="#about" class="text-gray-300 hover:text-blue-400 transition-all">About</a>
+                    <a href="#contact" class="text-gray-300 hover:text-blue-400 transition-all">Contact</a>
+                    <a href="path/to/your/resume.pdf" download class="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all">Download CV</a>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="md:hidden hidden mt-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="#home" class="text-white hover:text-blue-400 transition-all">Home</a>
+                    <a href="#portfolio" class="text-gray-300 hover:text-blue-400 transition-all">Portfolio</a>
+                    <a href="#about" class="text-gray-300 hover:text-blue-400 transition-all">About</a>
+                    <a href="#contact" class="text-gray-300 hover:text-blue-400 transition-all">Contact</a>
+                    <a href="path/to/your/resume.pdf" download class="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-center hover:from-blue-600 hover:to-purple-700 transition-all">Download CV</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-32 pb-20 px-6">
+        <div class="container mx-auto flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-12 md:mb-0">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+                    Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">3D Universe</span>
+                </h1>
+                <p class="text-xl text-gray-300 mb-8">
+                    Developing innovative, intelligent solutions by seamlessly integrating robust, efficient code with deep, actionable data insights and bold, imaginative creativity.
+                </p>
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#skills" class="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-center font-semibold hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105">
+                        My Skills
+                    </a>
+                    <div class="flex space-x-4">
+                        <a href="https://github.com/akm164" target="_blank" class="px-8 py-4 border border-gray-700 rounded-full text-center font-semibold hover:bg-gray-800 transition-all transform hover:scale-105">
+                            <i class="fab fa-github mr-2"></i>Github
+                        </a>
+                        <a href="www.linkedin.com/in/aalok-mandal-a80a8536b" target="_blank" class="px-8 py-4 border border-gray-700 rounded-full text-center font-semibold hover:bg-gray-800 transition-all transform hover:scale-105">
+                            <i class="fab fa-linkedin mr-2"></i>LinkedIn
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="md:w-1/2 relative">
+                <div class="relative w-full h-96 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-2xl overflow-hidden border border-gray-700/50">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-64 h-64 bg-gradient-to-r from-blue-400/30 to-purple-600/30 rounded-full animate-pulse"></div>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-40 h-40 bg-gradient-to-r from-blue-400/40 to-purple-600/40 rounded-full animate-ping"></div>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="fas fa-cube text-8xl text-white/20 animate-spin"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="portfolio" class="py-20 px-6 bg-gray-900/50 backdrop-blur-sm">
+        <div class="container mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">My Portfolio</h2>
+                <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                    Check out some of my recent projects and work
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Project 1 -->
+                <div class="group relative bg-gray-800/50 rounded-2xl border border-gray-700/50 transition-all card-hover overflow-hidden">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="project1.jpg" alt="AI-Powered E-commerce" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6">
+                            <div>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm">AI/ML</span>
+                                    <span class="px-3 py-1 bg-purple-500/20 text-purple-400 rounded-full text-sm">Full Stack</span>
+                                </div>
+                                <h3 class="text-2xl font-bold">AI-Powered E-commerce</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-300 mb-4">
+                            Built a recommendation engine using TensorFlow that increased sales by 32%. Integrated with Stripe for payments and deployed on AWS.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <a href="#" class="text-blue-400 hover:text-blue-300 transition-all flex items-center">
+                                View Project <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                            <div class="flex space-x-3">
+                                <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-github"></i></a>
+                                <a href="#" class="text-gray-400 hover:text-white"><i class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="group relative bg-gray-800/50 rounded-2xl border border-gray-700/50 transition-all card-hover overflow-hidden">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="project2.jpg" alt="Data Visualization Dashboard" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6">
+                            <div>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm">Data Science</span>
+                                    <span class="px-3 py-1 bg-purple-500/20 text-purple-400 rounded-full text-sm">React</span>
+                                </div>
+                                <h3 class="text-2xl font-bold">Data Visualization Dashboard</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-300 mb-4">
+                            Interactive dashboard for financial data analysis using D3.js and React. Processes millions of records with optimized backend in Node.js.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <a href="#" class="text-blue-400 hover:text-blue-300 transition-all flex items-center">
+                                View Project <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                            <div class="flex space-x-3">
+                                <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-github"></i></a>
+                                <a href="#" class="text-gray-400 hover:text-white"><i class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="group relative bg-gray-800/50 rounded-2xl border border-gray-700/50 transition-all card-hover overflow-hidden">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="project3.jpg" alt="Cloud Migration Tool" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6">
+                            <div>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm">Cloud</span>
+                                    <span class="px-3 py-1 bg-purple-500/20 text-purple-400 rounded-full text-sm">DevOps</span>
+                                </div>
+                                <h3 class="text-2xl font-bold">Cloud Migration Tool</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-300 mb-4">
+                            Automated cloud migration solution that reduced deployment times by 75%. Supports AWS, Azure and GCP with Terraform infrastructure as code.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <a href="#" class="text-blue-400 hover:text-blue-300 transition-all flex items-center">
+                                View Project <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                            <div class="flex space-x-3">
+                                <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-github"></i></a>
+                                <a href="#" class="text-gray-400 hover:text-white"><i class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="group relative bg-gray-800/50 rounded-2xl border border-gray-700/50 transition-all card-hover overflow-hidden">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="project4.jpg" alt="ML Fraud Detection" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6">
+                            <div>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm">AI/ML</span>
+                                    <span class="px-3 py-1 bg-purple-500/20 text-purple-400 rounded-full text-sm">Python</span>
+                                </div>
+                                <h3 class="text-2xl font-bold">ML Fraud Detection</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-300 mb-4">
+                            Machine learning model that detects fraudulent transactions with 98% accuracy. Built with Scikit-learn and deployed as a microservice.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <a href="#" class="text-blue-400 hover:text-blue-300 transition-all flex items-center">
+                                View Project <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                            <div class="flex space-x-3">
+                                <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-github"></i></a>
+                                <a href="#" class="text-gray-400 hover:text-white"><i class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 px-6">
+        <div class="container mx-auto flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-12 md:mb-0 md:pr-12">
+                <div class="relative w-full h-96 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-2xl overflow-hidden border border-gray-700/50">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-48 h-48 bg-gradient-to-r from-blue-400/30 to-purple-600/30 rounded-full animate-pulse"></div>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-32 h-32 bg-gradient-to-r from-blue-400/40 to-purple-600/40 rounded-full animate-ping"></div>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="fas fa-user-astronaut text-8xl text-white/20 animate-bounce"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="md:w-1/2">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">About Me</h2>
+                <p class="text-gray-300 mb-6">
+                    I'm a computer science student pursuing a double major in Software Engineering and AI & Data Science. I have a deep passion for coding and analytical problem solving, which drives me to develop efficient algorithms and innovative data-driven models.
+                </p>
+                <p class="text-gray-300 mb-8">
+                    Blending logical rigor with creative thinking, I strive to transform abstract ideas into practical, intelligent solutions. I constantly push boundaries to harness technology's transformative power in every project I undertake.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-blue-500 rounded-full mr-2"></div>
+                        <span>3D Modeling</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-purple-500 rounded-full mr-2"></div>
+                        <span>Animation</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-blue-400 rounded-full mr-2"></div>
+                        <span>Web Development</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-purple-400 rounded-full mr-2"></div>
+                        <span>UI/UX Design</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-16 bg-gradient-to-r from-blue-900/40 to-purple-900/40">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <!-- AI/ML Skill -->
+                <div class="skill-card" data-skill="ai">
+                    <div class="p-6 skill-main">
+                        <div class="text-4xl md:text-5xl font-bold mb-2">AI/ML</div>
+                        <div class="text-gray-300">Machine Learning</div>
+                    </div>
+                    <div class="skill-details hidden">
+                        <div class="p-6 bg-gray-800/50 rounded-lg border border-gray-700/50">
+                            <ul class="space-y-2 text-left">
+                                <li>Deep Learning</li>
+                                <li>Neural Networks</li>
+                                <li>Computer Vision</li>
+                                <li>NLP</li>
+                                <li>TensorFlow/PyTorch</li>
+                                <li>Generative AI</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Skill -->
+                <div class="skill-card" data-skill="data">
+                    <div class="p-6 skill-main">
+                        <div class="text-4xl md:text-5xl font-bold mb-2">Data</div>
+                        <div class="text-gray-300">Data Science</div>
+                    </div>
+                    <div class="skill-details hidden">
+                        <div class="p-6 bg-gray-800/50 rounded-lg border border-gray-700/50">
+                            <ul class="space-y-2 text-left">
+                                <li>Data Analysis</li>
+                                <li>Big Data</li>
+                                <li>Data Visualization</li>
+                                <li>SQL/NoSQL</li>
+                                <li>ETL Pipelines</li>
+                                <li>Statistics</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Full Stack Skill -->
+                <div class="skill-card" data-skill="full">
+                    <div class="p-6 skill-main">
+                        <div class="text-4xl md:text-5xl font-bold mb-2">Full</div>
+                        <div class="text-gray-300">Stack Dev</div>
+                    </div>
+                    <div class="skill-details hidden">
+                        <div class="p-6 bg-gray-800/50 rounded-lg border border-gray-700/50">
+                            <ul class="space-y-2 text-left">
+                                <li>Frontend (React/Vue)</li>
+                                <li>Backend (Node/Django)</li>
+                                <li>APIs</li>
+                                <li>Database Design</li>
+                                <li>DevOps</li>
+                                <li>Testing</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cloud Skill -->
+                <div class="skill-card" data-skill="cloud">
+                    <div class="p-6 skill-main">
+                        <div class="text-4xl md:text-5xl font-bold mb-2">Cloud</div>
+                        <div class="text-gray-300">Computing</div>
+                    </div>
+                    <div class="skill-details hidden">
+                        <div class="p-6 bg-gray-800/50 rounded-lg border border-gray-700/50">
+                            <ul class="space-y-2 text-left">
+                                <li>AWS/GCP/Azure</li>
+                                <li>Containerization</li>
+                                <li>Serverless</li>
+                                <li>Kubernetes</li>
+                                <li>IaC (Terraform)</li>
+                                <li>CI/CD</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-6">
+        <div class="container mx-auto max-w-4xl">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Get In Touch</h2>
+                <p class="text-xl text-gray-300">
+                    Have a project or question in mind? I'd love to hear from you!
+                </p>
+            </div>
+
+            <div class="bg-gray-800/50 p-8 md:p-12 rounded-2xl border border-gray-700/50">
+                <form id="contact-form" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="name" class="block mb-2">Your Name</label>
+                            <input type="text" id="name" class="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                        </div>
+                        <div>
+                            <label for="email" class="block mb-2">Your Email</label>
+                            <input type="email" id="email" class="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="subject" class="block mb-2">Subject</label>
+                        <input type="text" id="subject" class="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" required>
+                    </div>
+                    <div>
+                        <label for="message" class="block mb-2">Message</label>
+                        <textarea id="message" rows="5" class="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" required></textarea>
+                    </div>
+                    <div>
+                        <button type="submit" class="w-full px-6 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105">
+                            Send Message
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900/80 backdrop-blur-sm border-t border-gray-800 py-12 px-6">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-cube mr-2"></i> I Develop
+                    </h3>
+                    <p class="text-gray-400">
+                        I develop versatile digital experiences—from sleek personal sites to dynamic cleaning service platforms and beyond—using robust software development and creative problem-solving.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-white transition-all">Home</a></li>
+                        <li><a href="#portfolio" class="text-gray-400 hover:text-white transition-all">Portfolio</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition-all">About</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white transition-all">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Connect With Me</h4>
+                    <div class="flex flex-col space-y-4">
+                        <a href="https://x.com/aalokmandal19?s=21&t=587uRgk4qQBlxn-FsGu8lQ" target="_blank" class="text-gray-400 hover:text-white transition-all">
+                            <i class="fab fa-twitter mr-2"></i> Twitter
+                        </a>
+                        <a href="https://www.facebook.com/share/1N8EB4w91u/?mibextid=wwXIfr" target="_blank" class="text-gray-400 hover:text-white transition-all">
+                            <i class="fab fa-facebook mr-2"></i> Facebook
+                        </a>
+                        <a href="https://www.instagram.com/aalokmondate91?igsh=MWJzOHU2dzU1a2x3Yg%3D%3D&utm_source=qr" target="_blank" class="text-gray-400 hover:text-white transition-all">
+                            <i class="fab fa-instagram mr-2"></i> Instagram
+                        </a>
+                        <a href="#" id="phone-link" class="text-gray-400 hover:text-white transition-all">
+                            <i class="fas fa-phone mr-2"></i> Phone
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Newsletter</h4>
+                    <p class="text-gray-400 mb-4">
+                        For any inquiries about my work, please feel free to drop me an email.
+                    </p>
+                    <form class="flex">
+                        <input type="email" placeholder="aalokm875@gmail.com" class="px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all w-full">
+                        <button type="submit" class="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-r-lg hover:from-blue-600 hover:to-purple-700 transition-all">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500">
+                <p>&copy; 2024 Aalok. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white shadow-lg transition-all opacity-0 invisible transform translate-y-4">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Close mobile menu if open
+                    mobileMenu.classList.add('hidden');
+
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Back to top button
+        const backToTopButton = document.getElementById('back-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible', 'translate-y-4');
+                backToTopButton.classList.add('opacity-100', 'visible', 'translate-y-0');
+            } else {
+                backToTopButton.classList.add('opacity-0', 'invisible', 'translate-y-4');
+                backToTopButton.classList.remove('opacity-100', 'visible', 'translate-y-0');
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Form submission
+        const contactForm = document.getElementById('contact-form');
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+
+            // Here you would typically send the data to a server
+            console.log({ name, email, subject, message });
+
+            // Show success message
+            alert('Thank you for your message! We will get back to you soon.');
+
+            // Reset form
+            contactForm.reset();
+        });
+
+        // Skill cards interaction
+        const skillCards = document.querySelectorAll('.skill-card');
+
+        skillCards.forEach(card => {
+            card.addEventListener('click', function() {
+                // Close other open cards first
+                skillCards.forEach(c => {
+                    if (c !== this) {
+                        c.classList.remove('active');
+                    }
+                });
+
+                // Toggle current card
+                this.classList.toggle('active');
+
+                // Add floating cubes animation
+                if (this.classList.contains('active')) {
+                    const skillType = this.dataset.skill;
+                    const colors = {
+                        ai: 'rgba(56, 182, 255, 0.3)',
+                        data: 'rgba(255, 56, 182, 0.3)',
+                        full: 'rgba(182, 255, 56, 0.3)',
+                        cloud: 'rgba(255, 182, 56, 0.3)'
+                    };
+
+                    // Create floating cubes specific to this skill
+                    const rect = this.getBoundingClientRect();
+                    for (let i = 0; i < 5; i++) {
+                        const cube = document.createElement('div');
+                        cube.className = 'floating-cube skill-cube';
+
+                        // Position around the clicked card
+                        const x = rect.left + (Math.random() * rect.width);
+                        const y = rect.top + (Math.random() * rect.height);
+
+                        cube.style.cssText = `
+                            left: ${x}px;
+                            top: ${y}px;
+                            width: ${20 + Math.random() * 30}px;
+                            height: ${20 + Math.random() * 30}px;
+                            background: ${colors[skillType]};
+                            animation: float 5s infinite ease-in-out ${i * 0.2}s;
+                        `;
+
+                        document.body.appendChild(cube);
+
+                        // Remove after animation
+                        setTimeout(() => {
+                            cube.remove();
+                        }, 5000);
+                    }
+                }
+            });
+        });
+
+        // Add more floating cubes dynamically
+        function addFloatingCubes() {
+            const bg3d = document.querySelector('.bg-3d');
+            const colors = ['rgba(56, 182, 255, 0.1)', 'rgba(255, 56, 182, 0.1)', 'rgba(182, 255, 56, 0.1)', 'rgba(255, 182, 56, 0.1)'];
+
+            for (let i = 0; i < 10; i++) {
+                const cube = document.createElement('div');
+                cube.className = 'floating-cube';
+
+                // Random position
+                const top = Math.random() * 100;
+                const left = Math.random() * 100;
+
+                // Random size
+                const size = 20 + Math.random() * 60;
+
+                // Random animation duration and delay
+                const duration = 10 + Math.random() * 20;
+                const delay = Math.random() * 10;
+
+                // Random color
+                const color = colors[Math.floor(Math.random() * colors.length)];
+
+                cube.style.cssText = `
+                    top: ${top}%;
+                    left: ${left}%;
+                    width: ${size}px;
+                    height: ${size}px;
+                    background: ${color};
+                    animation-duration: ${duration}s;
+                    animation-delay: ${delay}s;
+                `;
+
+                bg3d.appendChild(cube);
+            }
+        }
+
+        // Call the function to add cubes
+        addFloatingCubes();
+
+        // Parallax effect for hero section
+        window.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+
+            const heroContent = document.querySelector('#home > div > div:first-child');
+            if (heroContent) {
+                heroContent.style.transform = `translate(${x * 20 - 10}px, ${y * 20 - 10}px)`;
+            }
+
+            const heroImage = document.querySelector('#home > div > div:last-child');
+            if (heroImage) {
+                heroImage.style.transform = `translate(${x * -20 + 10}px, ${y * -20 + 10}px)`;
+            }
+        });
+    </script>
+
+    <!-- Phone reveal overlay -->
+    <div class="phone-reveal">
+        <div class="phone-number">+61 452 609 840</div>
+    </div>
+
+    <script>
+        // Phone number reveal
+        const phoneLink = document.getElementById('phone-link');
+        const phoneReveal = document.querySelector('.phone-reveal');
+
+        phoneLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            phoneReveal.classList.add('active');
+
+            // Close after 3 seconds
+            setTimeout(() => {
+                phoneReveal.classList.remove('active');
+            }, 3000);
+        });
+
+        // Close when clicking outside
+        phoneReveal.addEventListener('click', () => {
+            phoneReveal.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

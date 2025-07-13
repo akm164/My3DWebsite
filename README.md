@@ -82,8 +82,10 @@ images/: Project thumbnails used in the portfolio section
 index.html: Main entry point with embedded CSS and JavaScript
 
 README.md: Project overview and instructions
+```
 
-Getting Started
+### Getting Started
+```text
 Prerequisites
 No build tools are required. A modern web browser and internet connection (for CDN links) are sufficient.
 
@@ -98,15 +100,19 @@ Usage
 - Open index.html directly in your browser
 - Or run a local server and navigate to http://localhost:5000:
     serve .
+```
 
-Deployment
+#### Deployment
+```text
 This site is ready for static hosting. To deploy on GitHub Pages:
   1. Push your changes to the main branch
   2. Go to Settings → Pages
   3. Under Source, select main branch and / (root) folder
   4. Click Save — your site will publish at https://<your-username>.github.io/My3DWebsite/
+```
 
-Contact
+##### Contact
+```text
 Feel free to reach out:
 Email: aalokm875@gmail.com
 LinkedIn: https://www.linkedin.com/in/aalok-mandal-a80a8536b/

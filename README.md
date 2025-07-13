@@ -74,51 +74,44 @@ My3DWebsite/
 │   └── project4.jpg
 ├── index.html
 └── README.md
-
-assets/: Downloadable resume PDF
-
-images/: Project thumbnails used in the portfolio section
-
-index.html: Main entry point with embedded CSS and JavaScript
-
-README.md: Project overview and instructions
 ```
 
-### Getting Started
+## Getting Started
 
 ```text
 Prerequisites
 No build tools are required. A modern web browser and internet connection (for CDN links) are sufficient.
 
 Installation
-
 1. Clone this repository
-  git clone https://github.com/akm164/My3DWebsite.git
-  cd My3DWebsite
+   git clone https://github.com/akm164/My3DWebsite.git
+   cd My3DWebsite
 2. (Optional) Install a local server, for example:
+   npm install -g serve
 
 Usage
 - Open index.html directly in your browser
 - Or run a local server and navigate to http://localhost:5000:
-    serve .
+   serve .
 ```
 
-#### Deployment
+## Deployment
 
 ```text
 This site is ready for static hosting. To deploy on GitHub Pages:
-  1. Push your changes to the main branch
-  2. Go to Settings → Pages
-  3. Under Source, select main branch and / (root) folder
-  4. Click Save — your site will publish at https://<your-username>.github.io/My3DWebsite/
+1. Push your changes to the main branch
+2. Go to Settings → Pages
+3. Under Source, select main branch and / (root) folder
+4. Click Save — your site will publish at:
+   https://<your-username>.github.io/My3DWebsite/
 ```
 
-##### Contact
+## Contact
 
 ```text
 Feel free to reach out:
-Email: aalokm875@gmail.com
+Email:    aalokm875@gmail.com
 LinkedIn: https://www.linkedin.com/in/aalok-mandal-a80a8536b/
-GitHub: https://github.com/akm164
-Phone (reveal on tap): +61 452 609 840
-
+GitHub:   https://github.com/akm164
+Phone:    +61 452 609 840  (reveals on tap)
+```

@@ -85,6 +85,7 @@ README.md: Project overview and instructions
 ```
 
 ### Getting Started
+
 ```text
 Prerequisites
 No build tools are required. A modern web browser and internet connection (for CDN links) are sufficient.
@@ -103,6 +104,7 @@ Usage
 ```
 
 #### Deployment
+
 ```text
 This site is ready for static hosting. To deploy on GitHub Pages:
   1. Push your changes to the main branch
@@ -112,6 +114,7 @@ This site is ready for static hosting. To deploy on GitHub Pages:
 ```
 
 ##### Contact
+
 ```text
 Feel free to reach out:
 Email: aalokm875@gmail.com
